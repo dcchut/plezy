@@ -340,7 +340,7 @@ class _TimelineSliderState extends State<TimelineSlider> {
                   padding: const EdgeInsets.symmetric(horizontal: _sliderPadding),
                   child: CustomPaint(
                     painter: BufferRangePainter(
-                      ranges: widget.bufferRanges,
+                      ranges: const [],
                       duration: widget.duration,
                       chapters: widget.chaptersLoaded && widget.showChapterMarkersOnTimeline
                           ? widget.chapters
