@@ -127,9 +127,21 @@ inside() {
 }
 
 # ── Stage 1: runs on the host ──────────────────────────────────────────────
+# build-packages.py chmods these to 0755 so they're executable inside the
+# package, but git tracks them as 100644. Put the mode back so the working tree
+# stays clean; only the mode is touched, never the contents.
+restore_modes() {
+    local f
+    for f in linux/packaging/plezy.sh linux/packaging/after-install.sh linux/packaging/after-remove.sh; do
+        [[ "$(git -C "$REPO" ls-files -s -- "$f" | cut -c1-6)" == "100644" ]] && chmod 644 "$REPO/$f"
+    done
+    return 0
+}
+
 cleanup() {
     local status=$?
     trap - EXIT
+    restore_modes
     if (( KEEP )); then
         log "Skipping cleanup (--keep). Container '$CONTAINER' and $WORK are still there."
         exit "$status"
